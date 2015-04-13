@@ -1,0 +1,37 @@
+
+/*
+
+	Persian Sharetronix
+	-----------------------
+	
+	HamyarSTX, RTL
+	http://sharetronix.ir
+	
+*/
+
+@font-face {
+    font-family: 'Byekan';
+    src:url('./fonts/Yekan.eot');
+    src:url('./fonts/Yekan.eot?#iefix') format('embedded-opentype'),
+    url('./fonts/Yekan.svg#Elusive-Icons') format('svg'),
+    url('./fonts/Yekan.woff') format('woff'),
+    url('./fonts/Yekan.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+	direction: rtl;
+	text-align: right;
+	font: 12px Byekan, tahoma;
+	text-rendering: geometricPrecision;
+	color: #626262;
+}
+#pdate_format, #network_post_length, #debug, #email, #password, #captcha_word {
+	direction: ltr;
+	text-align: left;
+	font: 11px tahoma;
+}
+#login-panel .btn {
+	text-align: center;
+	font: 20px Byekan;
+}
