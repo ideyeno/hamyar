@@ -14,6 +14,7 @@
 		{
 			parent::__construct();
 			global $C;
+			$this->pluginfo = $this->manifest();
 			$this->rtl = (isset($C->RTL) ? intval($C->RTL) : 1);
 			$this->debug = (isset($C->DEBUG) ? intval($C->DEBUG) : 0);
 			$this->debug_ip = (isset($C->DEBUG_IP) ? intval($C->DEBUG_IP) : '127.0.0.1');
@@ -23,14 +24,12 @@
 			if ( $this->pdate === 1 ) {
 				require_once $C->PLUGINS_DIR.'hamyar/system/classes/class_pdate.php';
 			}
-			$this->pluginfo = $this->manifest();
 			$C->SHARETRONIX_IR		= $this->pluginfo->version;
 		}
 		
 		public function onPageLoad()
 		{
 			global $C, $page;
-			$this->setVar( 'html_lang_abbrv', 'fa', true );
 			
 			if ( $this->debug > 0 ) {
 				$C->DEBUG_USERS		= array($this->debug_ip);
@@ -106,11 +105,17 @@
 		}
 		
 		public function manifest() {
-			global $C, $cache;
+			global $C, $cache, $db2;
 			$manifest_file = $C->PLUGINS_DIR.'hamyar/manifest.json';
 			if (!is_file($manifest_file)) {
 				echo "همیار شیرترانیکس از فایل پیکربندی برخوردار نبوده یا معتبر نمی‌باشد!";
 				die();
+			}
+			if ( $C->LANGUAGE == 'fa' ) {
+				$languages_file = $C->INCPATH.'languages/fa/language.php';
+				if (!is_file($languages_file)) {
+					$db2->query('REPLACE INTO settings SET word="LANGUAGE", value="en"');
+				}
 			}
 			$cachekey	= 'check_hamyar_manifest';
 			$cached = $cache->get($cachekey);
@@ -166,7 +171,7 @@
 					$title = 'نگارش '.$check[3].' همیار شیرترانیکس منتشر شد!';
 					$message = 'برای بروزرسانی به <b><a href="http://sharetronix.ir/hamyar/" target="_blank">شیرترانیکس فارسی</a></b> رجوع نمایید ...';
 					$version_check_result = TRUE;
-				}elseif ( version_compare($check[4], $this->pluginfo->code_version, '>') ) {
+				}elseif ( version_compare($check[4], $C->LNG_VER, '>') ) {
 					$title = 'نگارش جدید بسته زبان فارسی منتشر شد!';
 					$message = 'برای بروزرسانی بسته زبان <b><a href="'.$C->SITE_URL.'plugin/hamyar/general/?lng=update&ver='.$check[4].'">اینجا</a></b> کلیک کرده یا فایل مذکور را <b><a href="http://sharetronix.ir/lng/'.$check[4].'.zip" target="_blank">دانلود</a></b> نمایید.';
 					$version_check_result = TRUE;
@@ -262,16 +267,9 @@
 				mkdir($to, 0777, true);
 			}
 			rcopy($langfolder . "/fa", $to);
-			$sql = "INSERT INTO languages (
-					langkey, installed, `version`
-				) VALUES (
-					'fa', 1, " . $ver . "
-				) 
-				ON DUPLICATE  KEY
-					UPDATE installed = 1, `version` = " . $ver . "
-			";
-			$db2->query($sql);
+			$db2->query("INSERT INTO languages (langkey, installed, `version`) VALUES ('fa', 1, 5) ON DUPLICATE  KEY UPDATE installed = 1, `version` = 5");
 			$db2->query('REPLACE INTO settings SET word="LANGUAGE", value="fa"');
+			$db2->query('REPLACE INTO settings SET word="LNG_VER", value="'.$ver.'"');
 			$cache->del('check_hamyar_manifest');
 		}
 		
