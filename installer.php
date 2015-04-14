@@ -23,7 +23,7 @@ class MyInstaller extends Installer {
 		$db1->query('REPLACE INTO settings SET word="PDATE_TYPE", value="1"');
 		$db1->query('REPLACE INTO settings SET word="RTL", value="1"');
 		$manifest = json_decode(file_get_contents($manifest_file));
-		$db2->query('REPLACE INTO settings SET word="LNG_VER", value="'.$manifest->code_version.'"');
+		$db1->query('REPLACE INTO settings SET word="LNG_VER", value="'.$manifest->code_version.'"');
 	}
 	
 	public function down(){

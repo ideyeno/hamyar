@@ -29,10 +29,17 @@
 	$C->SHARETRONIX_IR = (isset($C->SHARETRONIX_IR) ? $C->SHARETRONIX_IR : '');
 	
 	$tab = '';
+	$css = '';
+	if (!class_exists('hamyar')) {
+		require_once $C->PLUGINS_DIR.'hamyar/plugin.php';
+		$css = '<link href="'.$C->SITE_URL .'apps/hamyar/static/pluginstaller.css" type="text/css" rel="stylesheet" />';
+	} 
+	$folder = $css;
+	$mnfst = $css;
 	if( $this->param('tab') && in_array($this->param('tab'), $tabs) ) {
 		$tab	= $this->param('tab');
 	}else{
-		$folder = '<h3 class="section-title1" >مدیریت پلاگین</h3><div class="afterttl">';
+		$folder .= '<h3 class="section-title1" >مدیریت پلاگین</h3><div class="afterttl">';
 		if (is_dir($C->PLUGINS_DIR)){
 			$dp = opendir($C->PLUGINS_DIR);
 			while ($entry = readdir($dp)) {
@@ -74,7 +81,7 @@
 		global $C, $plugins_manager, $user;
 		$PLUGIN_DIR = $this->param('folder');
 		$manifest_file = $C->PLUGINS_DIR.$PLUGIN_DIR."/manifest.json";
-		$mnfst = '<h3 class="section-title2" >مشخصات پلاگین '.$PLUGIN_DIR.'</h3>';
+		$mnfst .= '<h3 class="section-title2" >مشخصات پلاگین '.$PLUGIN_DIR.'</h3>';
 		if(!is_file($manifest_file)){
 			$mnfst .= "پلاگین مورد نظر از فایل پیکربندی برخوردار نبوده یا معتبر نمی‌باشد.";
 		}else{
@@ -144,7 +151,7 @@
 			$manifest = json_decode(file_get_contents($manifest_file));
 			$cache->set($cachekey, $manifest, 1*60*60);
 		}
-		$mnfst = '<h3 class="section-title3" >نصب پلاگین '.$PLUGIN_DIR.'</h3>';
+		$mnfst .= '<h3 class="section-title3" >نصب پلاگین '.$PLUGIN_DIR.'</h3>';
 		if(!is_file($manifest_file)){
 			$mnfst .= "پلاگین مورد نظر از فایل پیکربندی برخوردار نبوده یا معتبر نمی‌باشد.";
 		}else{
@@ -196,7 +203,7 @@
 			$manifest = json_decode(file_get_contents($manifest_file));
 			$cache->set($cachekey, $manifest, 1*60*60);
 		}
-		$mnfst = '<h3 class="section-title3" >نصب پلاگین '.$PLUGIN_DIR.'</h3>';
+		$mnfst .= '<h3 class="section-title3" >نصب پلاگین '.$PLUGIN_DIR.'</h3>';
 		if(!is_file($manifest_file)){
 			$mnfst .= "پلاگین مورد نظر از فایل پیکربندی برخوردار نبوده یا معتبر نمی‌باشد.";
 		}else{

@@ -165,8 +165,14 @@ th, td, caption {
 .group-section .description, .group-section .title {
 	  margin: 5px 0px 5px 160px;
 }
+.navigation {
+	margin-bottom: 10px;
+}
 .navigation li {
 	float: right;
+}
+.noposts h3 {
+	margin-bottom: 10px;
 }
 .layout-sc .navigation li:first-child a  {
 	  border-left: 1px solid #BBBBBB;

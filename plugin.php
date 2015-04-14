@@ -13,7 +13,7 @@
 		public function __construct()
 		{
 			parent::__construct();
-			global $C;
+			global $C;		
 			$this->pluginfo = $this->manifest();
 			$this->rtl = (isset($C->RTL) ? intval($C->RTL) : 1);
 			$this->debug = (isset($C->DEBUG) ? intval($C->DEBUG) : 0);
@@ -50,6 +50,9 @@
 			}
 			
 			if ( $this->user->is_logged ){
+				
+				$this->setVar( 'header_top_menu', '<li><a class="item-btn '.( $this->getCurrentController() === 'user' ? 'active' : '').'" href="'. $C->SITE_URL.$this->user->info->username.'"><span>پروفایل</span></a></li>' );
+				
 				if ( $this->user->info->is_network_admin > 0 ){
 					
 					// اعلام بروزرسانی جدید
@@ -59,7 +62,7 @@
 					
 					// اضافه کردن لینک به منو
 					$this->setVar( 'administration_left_menu', '<li><a class="item-btn '.( $this->getCurrentController() === 'general'? ' selected' : '').'" href="'. $C->SITE_URL .'plugin/hamyar/general"><span>همیار شیرترانیکس</span></a></li>' );
-					$this->setVar( 'administration_left_menu', '<li><a class="item-btn '.( $this->getCurrentController() === 'pluginstaller'? ' selected' : '').'" href="'. $C->SITE_URL .'plugin/hamyar/pluginstaller"><span>نصب پلاگین</span></a></li>' );
+					$this->setVar( 'administration_left_menu', '<li><a class="item-btn '.( $this->getCurrentController() === 'pluginstaller'? ' selected' : '').'" href="'. $C->SITE_URL .'plugin/hamyar/pluginstaller"><span>مدیریت پلاگین</span></a></li>' );
 					
 					// نمایش جزئیات
 					//$this->setVar( 'left_content_placeholder', 'وضعیت لود سرور : '.$this->get_load().'<br>' );
@@ -95,21 +98,17 @@
 			}				
 		}
 		
-		public function get_load() {
-			if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-				GLOBAL $D;
-				$load = sys_getloadavg();		
-				return $load[0];
-			}
-			return '1';
-		}
-		
 		public function manifest() {
-			global $C, $cache, $db2;
+			global $C, $cache, $db2, $page, $plugins_manager;
 			$manifest_file = $C->PLUGINS_DIR.'hamyar/manifest.json';
 			if (!is_file($manifest_file)) {
-				echo "همیار شیرترانیکس از فایل پیکربندی برخوردار نبوده یا معتبر نمی‌باشد!";
-				die();
+				//echo "همیار شیرترانیکس از فایل پیکربندی برخوردار نبوده یا معتبر نمی‌باشد!";
+				//die();
+				$db2->query("DELETE FROM plugins WHERE name='hamyar'");
+				$db2->query("DELETE FROM plugins_tables WHERE owner='hamyar'");
+				$plugins_manager->invalidateEventCache();
+				invalidateCachedHTML();
+				//$page->redirect('settings');
 			}
 			if ( $C->LANGUAGE == 'fa' ) {
 				$languages_file = $C->INCPATH.'languages/fa/language.php';
@@ -162,26 +161,29 @@
 			}
 			if ( isset ($result) ) {
 				$check = explode(":", $result);
-				$version_check_result = FALSE;
-				if ( version_compare($check[1], $C->VERSION, '>') ) {
-					$title = 'نگارش '.$check[1].' شیرترانیکس منتشر شد!';
-					$message = 'برای بروزرسانی به <b><a href="http://sharetronix.ir/download/" target="_blank">شیرترانیکس فارسی</a></b> رجوع نمایید ...';
-					$version_check_result = TRUE;
-				}elseif ( version_compare($check[3], $this->pluginfo->version, '>') ) {
-					$title = 'نگارش '.$check[3].' همیار شیرترانیکس منتشر شد!';
-					$message = 'برای بروزرسانی به <b><a href="http://sharetronix.ir/hamyar/" target="_blank">شیرترانیکس فارسی</a></b> رجوع نمایید ...';
-					$version_check_result = TRUE;
-				}elseif ( version_compare($check[4], $C->LNG_VER, '>') ) {
-					$title = 'نگارش جدید بسته زبان فارسی منتشر شد!';
-					$message = 'برای بروزرسانی بسته زبان <b><a href="'.$C->SITE_URL.'plugin/hamyar/general/?lng=update&ver='.$check[4].'">اینجا</a></b> کلیک کرده یا فایل مذکور را <b><a href="http://sharetronix.ir/lng/'.$check[4].'.zip" target="_blank">دانلود</a></b> نمایید.';
-					$version_check_result = TRUE;
-				}else{
+				if ( in_array($check[0], array('OK', 'ER')) ) {
 					$version_check_result = FALSE;
+					if ( version_compare($check[1], $C->VERSION, '>') ) {
+						$title = 'نگارش '.$check[1].' شیرترانیکس منتشر شد!';
+						$message = 'برای بروزرسانی به <b><a href="http://sharetronix.ir/download/" target="_blank">شیرترانیکس فارسی</a></b> رجوع نمایید ...';
+						$version_check_result = TRUE;
+					}elseif ( version_compare($check[3], $this->pluginfo->version, '>') ) {
+						$title = 'نگارش '.$check[3].' همیار شیرترانیکس منتشر شد!';
+						$message = 'برای بروزرسانی به <b><a href="http://sharetronix.ir/hamyar/" target="_blank">شیرترانیکس فارسی</a></b> رجوع نمایید ...';
+						$version_check_result = TRUE;
+					}elseif ( version_compare($check[4], $C->LNG_VER, '>') ) {
+						$title = 'نگارش جدید بسته زبان فارسی منتشر شد!';
+						$message = 'برای بروزرسانی بسته زبان <b><a href="'.$C->SITE_URL.'plugin/hamyar/general/?lng=update&ver='.$check[4].'">اینجا</a></b> کلیک کرده یا فایل مذکور را <b><a href="http://sharetronix.ir/lng/'.$check[4].'.zip" target="_blank">دانلود</a></b> نمایید.';
+						$version_check_result = TRUE;
+					}else{
+						$version_check_result = FALSE;
+					}
+					if( $version_check_result ){
+						$tpl = new template( array(), FALSE );
+						$this->setVar('main_content_placeholder', $tpl->designer->okMessage($title, $message, TRUE) );
+					}
 				}
-				if( $version_check_result ){
-					$tpl = new template( array(), FALSE );
-					$this->setVar('main_content_placeholder', $tpl->designer->okMessage($title, $message, TRUE) );
-				}
+				return false;
 			}
 			return false;
 		}
