@@ -214,7 +214,7 @@
 		private function getFile($ver){
 			$timeout = 5;
 			$req = curl_init();
-			curl_setopt($req, CURLOPT_URL, 'http://sharetronix.ir/lng/'.$ver.'.zip');
+			curl_setopt($req, CURLOPT_URL, 'http://sharetronix.ir/lng/fa-ir_'.$ver.'.zip');
 			curl_setopt($req, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($req, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$data = curl_exec($req);
