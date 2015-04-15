@@ -36,6 +36,9 @@
 				$C->DEBUG_CONSOLE  	= TRUE;
 			}
 			
+			// متن ادیتور
+			//$this->setVar('in_group', '', true);
+			
 			// فراخوانی RTL/CSS
 			if ( $this->rtl > 0 ) {
 				if ($page->is_mobile) {

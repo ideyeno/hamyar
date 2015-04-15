@@ -253,3 +253,11 @@ text-align: center;
   padding: 0 10px;
   margin-left: 10px;
 }
+#header-search .searchselect .menu-btn {
+  background-position: right 12px;
+  padding: 0 15px 0 5px;
+  float: right;
+}
+#header-search .searchselect .menu-options {
+	right: 0px;
+}
