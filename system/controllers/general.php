@@ -86,7 +86,7 @@
 	$def_timezone	= isset($s->DEF_TIMEZONE) ? $s->DEF_TIMEZONE : $C->DEF_TIMEZONE;
 	$post_maxlength	= isset($s->POST_MAX_SYMBOLS) ? $s->POST_MAX_SYMBOLS : 1000;
 	$pdate_post	= (isset($s->PDATE) ? $s->PDATE : 0);
-	$debug	= (isset($s->DEBUG) && !empty($s->DEBUG)) ? $s->DEBUG : 0;
+	$debug	= (isset($s->DEBUG)) ? intval($s->DEBUG) : 0;
 	$debug_ip	= (isset($s->DEBUG_IP)) ? $s->DEBUG_IP : '127.0.0.1';
 	$pdate_format	=  (isset($s->PDATE_FORMAT) ? $s->PDATE_FORMAT : '%Y/%m/%d - %H:%M');
 	$pdate_type	=  (isset($s->PDATE_TYPE) ? $s->PDATE_TYPE : 1);

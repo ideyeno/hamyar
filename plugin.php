@@ -17,7 +17,7 @@
 			$this->pluginfo = $this->manifest();
 			$this->rtl = (isset($C->RTL) ? intval($C->RTL) : 1);
 			$this->debug = (isset($C->DEBUG) ? intval($C->DEBUG) : 0);
-			$this->debug_ip = (isset($C->DEBUG_IP) ? intval($C->DEBUG_IP) : '127.0.0.1');
+			$this->debug_ip = (isset($C->DEBUG_IP) ? strip_tags($C->DEBUG_IP) : '127.0.0.1');
 			$this->pdate = (isset($C->PDATE) ? intval($C->PDATE) : 0);
 			$this->pdate_type = (isset($C->PDATE_TYPE) ? intval($C->PDATE_TYPE) : 1);
 			$this->pdate_format = (isset($C->PDATE_FORMAT) ? strip_tags($C->PDATE_FORMAT) : '%Y/%m/%d - %H:%M');
@@ -30,11 +30,6 @@
 		public function onPageLoad()
 		{
 			global $C, $page;
-			
-			if ( $this->debug > 0 ) {
-				$C->DEBUG_USERS		= array($this->debug_ip);
-				$C->DEBUG_CONSOLE  	= TRUE;
-			}
 			
 			// متن ادیتور
 			//$this->setVar('in_group', '', true);
@@ -57,6 +52,11 @@
 				$this->setVar( 'header_top_menu', '<li><a class="item-btn bizcard '.( $this->getCurrentController() === 'user' ? 'active' : '').'" data-userid="'.$this->user->id.'" href="'. $C->SITE_URL.$this->user->info->username.'"><span>پروفایل</span></a></li>' );
 				
 				if ( $this->user->info->is_network_admin > 0 ){
+					
+					if ( $this->debug > 0 ) {
+						$C->DEBUG_USERS		= array($this->debug_ip);
+						$C->DEBUG_CONSOLE  	= TRUE;
+					}
 					
 					// اعلام بروزرسانی جدید
 					if ( in_array($this->getCurrentController(), array('admin', 'general', 'hamyar', 'pluginstaller')) ) {
