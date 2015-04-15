@@ -261,3 +261,8 @@ text-align: center;
 #header-search .searchselect .menu-options {
 	right: 0px;
 }
+.search-plugins input[type="text"] {
+  width: 627px;
+  float: right;
+  margin-left: 7px;
+}
