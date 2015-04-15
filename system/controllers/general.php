@@ -202,9 +202,9 @@
 	$tpl->layout->setVar('main_content', $table->createTableInput( $rows ));
 	
 	$num_pu = intval($db2->fetch_field('SELECT COUNT(id) FROM post_userbox'));
-	$type = '<font color="green">(لزومی به پاکسازی نیست)</font>';
+	$type = '<font color="green">(لزومی به تخلیه نیست)</font>';
 	if ( $num_pu > 100000 ) {
-		$type = '<font color="red">(پاکسازی کنید)</font>';
+		$type = '<font color="red">(تخلیه کنید)</font>';
 	}
 	
 	$folder = '';
