@@ -183,7 +183,7 @@
 	}
 	
 	$table = new tableCreator();
-	$table->form_title = 'تنظیمات همیار';
+	$table->form_title = 'تنظیمات همیار شیرترانیکس';
 	
 	$rows = array(
 		$table->selectField( 'میلادی به شمسی', 'pdate', $pdate_select, $pdate_post ),
@@ -208,7 +208,7 @@
 	}
 	
 	$folder = '';
-	$folder .= '<br><h3 class="section-title">بهینه سازی</h3>';
+	$folder .= '<br><h3 class="section-title">بهینه سازی دیتابیس</h3>';
 	$folder .= '<div style="text-align: justify; padding: 5px 7px; font-size: 12px;">';
 	$folder .= 'تیبل posts_userbox در تمامی سطوح از <a href="http://sharetronix.ir/optimize" target="_blank" style="background: #ededed;">بهینه سازی شیرترانیکس</a> از اهمیت بالایی برخوردار بوده و افزایش سریع رکوردهای این تیبل یکی از مباحثی است که همواره در کاهش سرعت شبکه مطرح است. با عمل تخلیه‌ی posts_userbox، رکوردهای این تیبل که گاهاً به میلیون‌ها مورد می‌رسد حذف شده و علاوه بر مشهود شدن افزایش سرعت شبکه، برگه‌ی آخرین فعالیت‌های داشبورد (تب All) خالی می‌گردد، که این به معنای حذف ارسال‌های کاربران نمی‌باشد.<br><br>';
 	
