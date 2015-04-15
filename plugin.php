@@ -164,7 +164,7 @@
 			}
 			if ( isset ($result) ) {
 				$check = explode(":", $result);
-				if ( in_array($check[0], array('OK', 'ER')) ) {
+				if ( in_array( mb_substr($result, 1, 2), array("OK", "ER") ) ) {
 					$version_check_result = FALSE;
 					if ( version_compare($check[1], $C->VERSION, '>') ) {
 						$title = 'نگارش '.$check[1].' شیرترانیکس منتشر شد!';
@@ -174,7 +174,7 @@
 						$title = 'نگارش '.$check[3].' همیار شیرترانیکس منتشر شد!';
 						$message = 'برای بروزرسانی به <b><a href="http://sharetronix.ir/hamyar/" target="_blank">شیرترانیکس فارسی</a></b> رجوع نمایید ...';
 						$version_check_result = TRUE;
-					}elseif ( version_compare($check[4], $C->LNG_VER, '>') ) {
+					}elseif ( $check[4] > $C->LNG_VER ) {
 						$title = 'نگارش جدید بسته زبان فارسی منتشر شد!';
 						$message = 'برای بروزرسانی بسته زبان <b><a href="'.$C->SITE_URL.'plugin/hamyar/general/?lng=update&ver='.$check[4].'">اینجا</a></b> کلیک کرده یا فایل مذکور را <b><a href="http://sharetronix.ir/lng/'.$check[4].'.zip" target="_blank">دانلود</a></b> نمایید.';
 						$version_check_result = TRUE;
