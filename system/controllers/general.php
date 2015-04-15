@@ -183,7 +183,7 @@
 	}
 	
 	$table = new tableCreator();
-	$table->form_title = 'تنظیمات همیار شیرترانیکس';
+	$table->form_title = 'تنظیمات همیار';
 	
 	$rows = array(
 		$table->selectField( 'میلادی به شمسی', 'pdate', $pdate_select, $pdate_post ),
@@ -200,6 +200,31 @@
 	);
 
 	$tpl->layout->setVar('main_content', $table->createTableInput( $rows ));
+	
+	$num_pu = intval($db2->fetch_field('SELECT COUNT(id) FROM post_userbox'));
+	$type = '<font color="green">(لزومی به پاکسازی نیست)</font>';
+	if ( $num_pu > 100000 ) {
+		$type = '<font color="red">(پاکسازی کنید)</font>';
+	}
+	
+	$folder = '';
+	$folder .= '<br><h3 class="section-title">بهینه سازی</h3>';
+	$folder .= '<div style="text-align: justify; padding: 5px 7px; font-size: 12px;">';
+	$folder .= 'تیبل posts_userbox در تمامی سطوح از <a href="http://sharetronix.ir/optimize" target="_blank" style="background: #ededed;">بهینه سازی شیرترانیکس</a> از اهمیت بالایی برخوردار بوده و افزایش سریع رکوردهای این تیبل یکی از مباحثی است که همواره در کاهش سرعت شبکه مطرح است. با عمل تخلیه‌ی posts_userbox، رکوردهای این تیبل که گاهاً به میلیون‌ها مورد می‌رسد حذف شده و علاوه بر مشهود شدن افزایش سرعت شبکه، برگه‌ی آخرین فعالیت‌های داشبورد (تب All) خالی می‌گردد، که این به معنای حذف ارسال‌های کاربران نمی‌باشد.<br><br>';
+	
+	$folder .= '<a class="btn blue mybtn" href="'.$C->SITE_URL.'plugin/hamyar/general/?optimize=posts_userbox">تخلیه تیبل posts_userbox</a>';
+	$folder .= 'تعداد رکورد : <b>'.$num_pu.'</b> '.$type;
+	$folder .= '</div>';
+	$tpl->layout->setVar('main_content', $folder);
+	
+	if ( isset($_GET['optimize']) && $_GET['optimize'] == 'posts_userbox' ) {
+		$db2->query('TRUNCATE post_userbox');
+		$this->redirect('plugin/hamyar/general/optimize:ok');
+	}
+	
+	if ( $this->param('optimize') == 'ok' ) {
+		$tpl->layout->setVar('main_content_placeholder', $tpl->designer->okMessage('بهینه سازی انجام شد!', 'تیبل posts_userbox به درستی تخلیه شد.', TRUE) );
+	}
 	
 	$tpl->display();
 ?>

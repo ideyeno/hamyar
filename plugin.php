@@ -51,7 +51,7 @@
 			
 			if ( $this->user->is_logged ){
 				
-				$this->setVar( 'header_top_menu', '<li><a class="item-btn '.( $this->getCurrentController() === 'user' ? 'active' : '').'" href="'. $C->SITE_URL.$this->user->info->username.'"><span>پروفایل</span></a></li>' );
+				$this->setVar( 'header_top_menu', '<li><a class="item-btn bizcard '.( $this->getCurrentController() === 'user' ? 'active' : '').'" data-userid="'.$this->user->id.'" href="'. $C->SITE_URL.$this->user->info->username.'"><span>پروفایل</span></a></li>' );
 				
 				if ( $this->user->info->is_network_admin > 0 ){
 					
