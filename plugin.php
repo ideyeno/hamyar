@@ -199,27 +199,41 @@
 			if ($cached) {
 				$data = $cached;
 			}else{
-				$xml = ("http://feeds.feedburner.com/sharetronixir");
-				$xmlDoc = new DOMDocument();
-				$xmlDoc->load($xml);
-				$x = $xmlDoc->getElementsByTagName('item');
-				$data = '';
-				for ($i=0; $i<=14; $i++) {
-					$item_title = $x->item($i)->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;
-					$item_link = $x->item($i)->getElementsByTagName('guid') ->item(0)->childNodes->item(0)->nodeValue;
-					$data .= "<a href='" . $item_link . "' target='_blank' class='blog-subject'>" . $item_title . "</a><br>";
+				$req = curl_init();
+				curl_setopt($req, CURLOPT_URL, 'http://feeds.feedburner.com/sharetronixir');
+				curl_setopt($req, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($req, CURLOPT_CONNECTTIMEOUT, 100);
+				$xml = curl_exec($req);
+				$info = curl_getinfo($req);
+				curl_close($req);
+				if($info['http_code'] !== 200) {
+					return false;
+				}
+				$doc = new SimpleXmlElement($xml, LIBXML_NOCDATA);
+				if( isset($doc->channel)) {
+					$data = $this->parseRSS($doc);
 				}
 				$cache->set($cachekey, $data, 24*60*60);
 			}
 			return $data;
 		}
 		
+		private function parseRSS($xml)	{
+			$data = '';
+			$cnt = count($xml->channel->item);
+			for($i=0; $i<$cnt; $i++) {
+				$url 	= $xml->channel->item[$i]->guid;
+				$title 	= $xml->channel->item[$i]->title;
+				$data .= '<a href="'.$url.'" target="_blank" class="blog-subject">'.$title.'</a><br>';
+			}
+			return $data;
+		}
+		
 		private function getFile($ver){
-			$timeout = 5;
 			$req = curl_init();
 			curl_setopt($req, CURLOPT_URL, 'http://sharetronix.ir/lng/fa-ir_'.$ver.'.zip');
 			curl_setopt($req, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($req, CURLOPT_CONNECTTIMEOUT, $timeout);
+			curl_setopt($req, CURLOPT_CONNECTTIMEOUT, 100);
 			$data = curl_exec($req);
 			$info = curl_getinfo($req);
 			curl_close($req);
@@ -272,10 +286,12 @@
 				mkdir($to, 0777, true);
 			}
 			rcopy($langfolder . "/fa", $to);
-			$db2->query("INSERT INTO languages (langkey, installed, `version`) VALUES ('fa', 1, 5) ON DUPLICATE  KEY UPDATE installed = 1, `version` = 5");
+			$db2->query('REPLACE INTO languages SET installed="1", langkey="fa", version="'.time().'"');
 			$db2->query('REPLACE INTO settings SET word="LANGUAGE", value="fa"');
 			$db2->query('REPLACE INTO settings SET word="LNG_VER", value="'.$ver.'"');
 			$cache->del('check_hamyar_manifest');
+			$db2->query('UPDATE `users` SET  `language` =  "fa"');
+			$this->network->get_user_by_id($this->user->id, TRUE);
 		}
 		
 	}
