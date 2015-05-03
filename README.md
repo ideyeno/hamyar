@@ -1,11 +1,10 @@
 # Hamyar
-hamyarSTX for Sharetronix v3.x
-
 همیار شیرترانیکس، برای نسخه 3 شیرترانیکس فارسی
+hamyarSTX for Sharetronix v3.x
 
 <img src="http://sharetronix.ir/wp-content/uploads/2015/04/hamyarstx1.jpg" />
 
-# Features
+# امکانات
 - امکان شمسی‌کردن فریم‌ورک (با قابلیت فعالسازی و غیرفعالسازی)
 - امکان تعیین نوع نمایش زمان (زمان سپری شده یا تاریخ و ساعت)
 - امکان تعیین فرمت نمایش زمان در وضعیت نمایش تاریخ و ساعت
@@ -18,9 +17,9 @@ hamyarSTX for Sharetronix v3.x
 - امکان نمایش آخرین اخبار و مستندات شیرترانیکس فارسی
 و ...
 
-# ChangeLog
+# تغییرات
 http://sharetronix.ir/hamyar/
 
-# ScreenShot
+# تصاویر
 <img src="http://sharetronix.ir/wp-content/uploads/2015/04/hamyar-s1.jpg" />
 <img src="http://sharetronix.ir/wp-content/uploads/2015/04/hamyar-s2.jpg" />
